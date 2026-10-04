@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">AstrBot Neko Web UI</title>
+  <desc id="desc">A minimal cat face inside a web console window.</desc>
+  <rect width="512" height="512" rx="112" fill="#0f172a"/>
+  <rect x="64" y="64" width="384" height="384" rx="72" fill="#ffffff"/>
+  <path d="M64 136h384" fill="none" stroke="#dbeafe" stroke-width="16"/>
+  <circle cx="112" cy="100" r="10" fill="#38bdf8"/>
+  <circle cx="144" cy="100" r="10" fill="#7dd3fc"/>
+  <circle cx="176" cy="100" r="10" fill="#bae6fd"/>
+  <path d="M152 280V204l58 48c16-8 31-12 46-12s30 4 46 12l58-48v76c0 75-46 124-104 124s-104-49-104-124Z" fill="#38bdf8"/>
+  <path d="M152 204v76c0 75 46 124 104 124s104-49 104-124v-76l-58 48c-16-8-31-12-46-12s-30 4-46 12l-58-48Z" fill="none" stroke="#0f172a" stroke-width="16" stroke-linejoin="round"/>
+  <path d="M204 316c10 13 25 20 52 20s42-7 52-20" fill="none" stroke="#0f172a" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="218" cy="294" r="12" fill="#0f172a"/>
+  <circle cx="294" cy="294" r="12" fill="#0f172a"/>
+  <path d="M256 307v12" fill="none" stroke="#0f172a" stroke-width="10" stroke-linecap="round"/>
+</svg>

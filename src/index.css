@@ -1,0 +1,131 @@
+@import 'tailwindcss';
+@import './astrbot/astrbot.css';
+
+/* Dark mode is class driven (html.dark), set by our own theme code. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* --------------------------------------------------------------------------
+   Design tokens — Neko Console
+   The names follow the usual shadcn convention so page code stays unchanged;
+   the values are ours.
+   -------------------------------------------------------------------------- */
+:root {
+  --radius: 0.75rem;
+
+  --background: oklch(99% 0.004 240);
+  --foreground: oklch(21% 0.03 250);
+  --card: oklch(100% 0 0);
+  --card-foreground: oklch(21% 0.03 250);
+  --popover: oklch(100% 0 0);
+  --popover-foreground: oklch(21% 0.03 250);
+
+  --primary: oklch(68.5% 0.155 230);
+  --primary-foreground: oklch(99% 0.005 240);
+  --secondary: oklch(96% 0.012 240);
+  --secondary-foreground: oklch(26% 0.03 250);
+  --muted: oklch(96% 0.012 240);
+  --muted-foreground: oklch(50% 0.02 250);
+  --accent: oklch(95% 0.026 235);
+  --accent-foreground: oklch(34% 0.07 235);
+
+  --destructive: oklch(60% 0.22 27);
+  --destructive-foreground: oklch(99% 0.005 240);
+
+  --border: oklch(91% 0.012 245);
+  --input: oklch(89% 0.014 245);
+  --ring: var(--primary);
+
+  --sidebar: oklch(98% 0.008 240);
+  --sidebar-border: oklch(91% 0.012 245);
+
+  /* Accent shades kept as rgba so they also work on engines with no color-mix();
+     the appearance page rewrites these when the user picks a colour. */
+  --primary-soft: rgba(14, 165, 233, 0.12);
+  --primary-faint: rgba(14, 165, 233, 0.07);
+  --primary-line: rgba(14, 165, 233, 0.34);
+}
+
+html.dark {
+  --background: oklch(20% 0.022 250);
+  --foreground: oklch(96% 0.005 250);
+  --card: oklch(24% 0.022 250);
+  --card-foreground: var(--foreground);
+  --popover: oklch(24% 0.022 250);
+  --popover-foreground: var(--foreground);
+
+  --primary: oklch(72% 0.15 230);
+  --primary-foreground: oklch(18% 0.022 250);
+  --secondary: oklch(28% 0.022 250);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(28% 0.022 250);
+  --muted-foreground: oklch(71% 0.02 250);
+  --accent: oklch(31% 0.04 235);
+  --accent-foreground: oklch(93% 0.02 235);
+
+  --destructive: oklch(62% 0.21 27);
+  --destructive-foreground: oklch(98% 0.005 240);
+
+  --border: oklch(32% 0.022 250);
+  --input: oklch(34% 0.022 250);
+  --ring: var(--primary);
+
+  --sidebar: oklch(22% 0.022 250);
+  --sidebar-border: oklch(30% 0.022 250);
+
+  --primary-soft: rgba(56, 189, 248, 0.16);
+  --primary-faint: rgba(56, 189, 248, 0.09);
+  --primary-line: rgba(56, 189, 248, 0.38);
+}
+
+/* Make the tokens available as Tailwind colour utilities. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-border: var(--sidebar-border);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    background-color: var(--background);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family:
+      ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'PingFang SC',
+      'Microsoft YaHei', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+}

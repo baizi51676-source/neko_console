@@ -1,0 +1,553 @@
+/* Neko Console add-on layer: keyframes referenced by our components plus the
+   markdown pane styling. Imported from src/index.css after Tailwind. */
+
+@keyframes ping-soft {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.45;
+  }
+  70%,
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+@keyframes progress-marquee {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+@keyframes log-row-in {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0px at var(--vt-x, 50%) var(--vt-y, 50%));
+  }
+  to {
+    clip-path: circle(150% at var(--vt-x, 50%) var(--vt-y, 50%));
+  }
+}
+
+/* Theme switch: circular reveal from the click point. */
+::view-transition-old(root) {
+  animation: none;
+}
+
+::view-transition-new(root) {
+  animation: theme-reveal 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* markdown pane for plugin README / changelog */
+.md-body {
+  font-size: 13px;
+  line-height: 1.7;
+  word-break: break-word;
+}
+
+.md-body h1,
+.md-body h2,
+.md-body h3,
+.md-body h4 {
+  margin: 18px 0 8px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.md-body h1 {
+  font-size: 18px;
+}
+
+.md-body h2 {
+  font-size: 15.5px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.md-body h3 {
+  font-size: 14px;
+}
+
+.md-body p {
+  margin: 9px 0;
+}
+
+.md-body ul,
+.md-body ol {
+  margin: 9px 0;
+  padding-left: 22px;
+  list-style: revert;
+}
+
+.md-body li {
+  margin: 4px 0;
+}
+
+.md-body code {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 12px;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 1px 5px;
+}
+
+.md-body pre {
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  overflow: auto;
+  margin: 10px 0;
+}
+
+.md-body pre code {
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 11.5px;
+  line-height: 1.6;
+}
+
+.md-body blockquote {
+  margin: 10px 0;
+  padding: 6px 14px;
+  border-left: 3px solid var(--primary);
+  background: rgba(127, 127, 127, 0.09);
+  color: var(--muted-foreground);
+}
+
+.md-body a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.md-body hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 16px 0;
+}
+
+.md-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin: 10px 0;
+}
+
+.md-body th,
+.md-body td {
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.md-body img {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+/* ------------------------------------------------------------------ */
+/* wallpaper mode: let the background image show through the chrome    */
+/* ------------------------------------------------------------------ */
+html[data-wallpaper='on'] body {
+  background: transparent;
+}
+
+html[data-wallpaper='on'] aside.bg-sidebar {
+  background-color: rgba(255, 255, 255, 0.82);
+}
+
+html.dark[data-wallpaper='on'] aside.bg-sidebar {
+  background-color: rgba(16, 21, 28, 0.82);
+}
+
+html[data-wallpaper='on'] .bg-card {
+  backdrop-filter: blur(2px);
+}
+
+
+/* ------------------------------------------------------------------ */
+/* glass mode (toggleable from the appearance page)                    */
+/* Uses plain rgba translucency so it also works on engines without    */
+/* backdrop-filter / color-mix support (older Android WebView etc.).   */
+/* Only kicks in together with a wallpaper, so plain themes stay solid.*/
+/* ------------------------------------------------------------------ */
+/* NOTE: every rule below is written as a dark/light PAIR. A light rule MUST
+   carry `:not(.dark)` — forgetting it once made the page frame render the dark
+   panel colour even in white mode (“white mode, black base plate”). */
+html.dark[data-wallpaper='on'][data-glass='on'] aside.bg-sidebar {
+  background-color: rgba(17, 22, 29, 0.66);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+
+html[data-wallpaper='on'][data-glass='on']:not(.dark) aside.bg-sidebar {
+  background-color: rgba(255, 255, 255, 0.74);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+
+html.dark[data-wallpaper='on'][data-glass='on'] header.sticky {
+  background-color: rgba(17, 22, 29, 0.72);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+
+html[data-wallpaper='on'][data-glass='on']:not(.dark) header.sticky {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+
+html.dark[data-wallpaper='on'][data-glass='on'] nav.fixed {
+  background-color: rgba(17, 22, 29, 0.78);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+
+html[data-wallpaper='on'][data-glass='on']:not(.dark) nav.fixed {
+  background-color: rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+
+html.dark[data-wallpaper='on'][data-glass='on'] .bg-card {
+  background-color: rgba(20, 26, 34, 0.78);
+}
+
+html[data-wallpaper='on'][data-glass='on']:not(.dark) .bg-card {
+  background-color: rgba(255, 255, 255, 0.84);
+}
+
+html.dark[data-wallpaper='on'][data-glass='on'] .page-shell {
+  background-color: rgba(14, 20, 27, 0.78);
+  backdrop-filter: blur(8px) saturate(150%);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
+}
+
+html[data-wallpaper='on'][data-glass='on']:not(.dark) .page-shell {
+  background-color: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(8px) saturate(150%);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
+}
+
+html[data-glass='off'] aside.bg-sidebar,
+html[data-glass='off'] header.sticky,
+html[data-glass='off'] nav.fixed {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+
+/* ------------------------------------------------------------------ */
+/* page shell: one framed container per page for better readability    */
+/* ------------------------------------------------------------------ */
+.page-shell {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card);
+  padding: 14px;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.06));
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    padding: 10px;
+    border-radius: 12px;
+  }
+}
+
+
+/* ------------------------------------------------------------------ */
+/* forced-desktop fallback                                             */
+/* Some in-app browsers force a desktop UA *and* a 1280px-wide layout  */
+/* viewport on a ~400px screen, so everything renders tiny. Zooming the */
+/* body keeps the desktop layout but restores readable/usable sizes.   */
+/* Toggleable from the top bar (data-viewscale).                       */
+/* ------------------------------------------------------------------ */
+html[data-viewscale='on'] body {
+  zoom: 1.7;
+}
+
+html[data-viewscale='on'] .viewscale-hint {
+  display: block;
+}
+
+.viewscale-hint {
+  display: none;
+}
+
+
+/* ------------------------------------------------------------------ */
+/* rendering hardening for in-app browsers (WebView)                   */
+/* ------------------------------------------------------------------ */
+.wallpaper-layer {
+  transform: translateZ(0);
+  contain: strict;
+}
+
+/* keep the document scrollable to the very bottom even when the host    */
+/* browser reserves space for its own toolbars (visualViewport < innerH) */
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  overflow-y: auto;
+}
+
+/* host browsers often reserve space for their own bottom toolbar, which can
+   cut off the last row of a page; keep a safe gap on wide (desktop-mode)
+   viewports while mobile keeps its tab-bar padding */
+@media (min-width: 768px) {
+  main {
+    padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+
+/* ------------------------------------------------------------------ */
+/* accent consistency: interactive icons follow the theme accent        */
+/* ------------------------------------------------------------------ */
+aside button:hover svg,
+header button:hover svg,
+main button:hover svg {
+  color: var(--primary);
+}
+
+/* destructive affordances stay red */
+main button.text-destructive:hover svg,
+aside button.text-destructive:hover svg,
+header button.text-destructive:hover svg {
+  color: currentColor;
+}
+
+/* active sidebar entries keep the accent */
+aside button[aria-current='page'] svg {
+  color: var(--primary);
+}
+
+/* form controls pick up the accent while focused */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  border-color: var(--primary);
+}
+
+/* links, switches and slider thumbs in the accent colour */
+input[type='range'] {
+  accent-color: var(--primary);
+}
+
+
+/* ------------------------------------------------------------------ */
+/* accent helpers (no color-mix: works on every WebView we target)     */
+/* --primary-soft / --primary-line / --primary-faint are injected by    */
+/* the theme applier from the chosen accent colour.                    */
+/* ------------------------------------------------------------------ */
+:root {
+  --primary-soft: rgba(16, 185, 129, 0.12);
+  --primary-faint: rgba(16, 185, 129, 0.07);
+  --primary-line: rgba(16, 185, 129, 0.34);
+}
+
+.neko-chip-accent {
+  border-color: var(--primary-line) !important;
+  background: var(--primary-soft) !important;
+  color: var(--primary) !important;
+}
+
+.neko-dot-accent {
+  background: var(--primary) !important;
+}
+
+.neko-text-accent {
+  color: var(--primary) !important;
+}
+
+.neko-soft-bg {
+  background: var(--primary-faint) !important;
+}
+
+/* selection, checkboxes, sliders and scrollbars follow the accent too */
+::selection {
+  background: var(--primary-soft);
+}
+
+input[type='checkbox'],
+input[type='radio'],
+progress {
+  accent-color: var(--primary);
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--primary-soft);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-line);
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+/* ------------------------------------------------------------------ */
+/* colour-mix() fallbacks                                              */
+/* Tailwind compiles `bg-accent/60`, `border-border/60`, `bg-primary/90`*/
+/* into color-mix(), which some in-app WebViews drop entirely → hover   */
+/* feedback and borders silently disappear. These rules only apply when */
+/* color-mix() is unsupported, so modern engines keep the real colours. */
+/* ------------------------------------------------------------------ */
+:root {
+  --fallback-hover: rgba(127, 127, 127, 0.14);
+  --fallback-border: rgba(127, 127, 127, 0.24);
+  --fallback-subtle: rgba(127, 127, 127, 0.08);
+}
+
+html.dark {
+  --fallback-hover: rgba(255, 255, 255, 0.09);
+  --fallback-border: rgba(255, 255, 255, 0.13);
+  --fallback-subtle: rgba(255, 255, 255, 0.05);
+}
+
+@supports not (background-color: color-mix(in oklab, red 50%, transparent)) {
+  .hover\:bg-accent:hover,
+  .hover\:bg-accent\/60:hover,
+  .hover\:bg-accent\/40:hover,
+  .bg-accent\/60,
+  .bg-accent\/40,
+  .bg-muted\/40,
+  .bg-muted\/30 {
+    background-color: var(--fallback-hover);
+  }
+
+  .bg-accent\/20,
+  .bg-muted\/20 {
+    background-color: var(--fallback-subtle);
+  }
+
+  .border-border\/60,
+  .border-border\/50,
+  .border-border\/40,
+  .border-border\/30 {
+    border-color: var(--fallback-border);
+  }
+
+  .hover\:bg-primary\/90:hover,
+  .bg-primary\/10,
+  .bg-primary\/8 {
+    background-color: var(--primary-soft);
+  }
+
+  .bg-primary\/90,
+  .bg-primary\/80,
+  .bg-primary\/85 {
+    background-color: var(--primary);
+  }
+
+  .border-primary\/60,
+  .border-primary\/50,
+  .border-primary\/40,
+  .border-primary\/30 {
+    border-color: var(--primary-line);
+  }
+
+  .text-primary\/80,
+  .text-primary\/70 {
+    color: var(--primary);
+  }
+
+  .text-muted-foreground\/70::placeholder,
+  .text-muted-foreground\/60::placeholder {
+    color: var(--fallback-hover);
+  }
+}
+
+
+/* ------------------------------------------------------------------ */
+/* paint the document root                                             */
+/* `html` used to be fully transparent and only `body` carried a colour,*/
+/* so with a wallpaper enabled (body -> transparent) the host WebView's  */
+/* own default background (black) showed through at the edges, on       */
+/* overscroll/bounce and below short pages — exactly the “white mode but */
+/* the base plate is still black” symptom.                              */
+/* ------------------------------------------------------------------ */
+html {
+  background-color: var(--background);
+  /* keep the rubber-band area in the theme colour instead of the host's */
+  overscroll-behavior: none;
+}
+
+html[data-wallpaper='on'] {
+  background-color: var(--background);
+}
+
+body {
+  background-color: var(--background);
+}
+
+/* with a wallpaper the body is transparent so the image shows through;  */
+/* the root colour above still paints everything outside the viewport    */
+html[data-wallpaper='on'] body {
+  background-color: transparent;
+}
+
+#root {
+  min-height: 100%;
+}
+
+/* ------------------------------------------------------------------ */
+/* semantic warning colour                                             */
+/* (was hard-coded as amber-500/600 + dark:amber-400 in ~20 places)    */
+/* ------------------------------------------------------------------ */
+.neko-warn {
+  color: #b45309;
+}
+html.dark .neko-warn {
+  color: #fbbf24;
+}
+.neko-warn-chip {
+  border-color: rgba(217, 119, 6, 0.4);
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #b45309;
+}
+html.dark .neko-warn-chip {
+  color: #fbbf24;
+}
+.neko-warn-border {
+  border-color: rgba(217, 119, 6, 0.45);
+}
