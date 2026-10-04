@@ -31,15 +31,67 @@ npm run build       # 产物输出到 dist/
 npm i --registry=https://registry.npmmirror.com
 ```
 
-## 部署
+## 部署（三种方式）
 
-`dist/` 是纯静态产物，交给任意静态服务器即可，但必须：
+### 方式一：Docker Compose（推荐，含侧车）
 
-1. 把 `/api/*` 反向代理到 AstrBot 的 WebUI（默认 `http://127.0.0.1:6185`）；
-2. 让前端与 API **同源**，否则登录 Cookie / `Authorization` 不会生效；
+仓库自带 `Dockerfile` 与 `docker-compose.yml`。侧车（`server/server.mjs`）负责主题/壁纸持久化、对话页数据、插件 zip 上传与 Cookie 处理。
+
+```sh
+git clone https://github.com/baizi51676-source/neko_console.git
+cd neko_console
+cp .env.example .env     # 填写 ASTRBOT_BASE（AstrBot 的 WebUI 地址）
+docker compose up -d
+```
+
+然后打开 `http://<设备地址>:6186`。若 AstrBot 也在 docker 里，把它加入同一个网络后可直接用 `http://astrbot:6185`（`docker-compose.yml` 顶部有注释示例）。
+
+也可以只跑一条命令（会询问地址与端口，镜像拉取失败时自动回退为本地构建）：
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/baizi51676-source/neko_console/main/install.sh | sh
+```
+
+### 方式二：docker run
+
+```sh
+docker run -d --name neko-console --restart unless-stopped \
+  -p 6186:6186 \
+  -e ASTRBOT_BASE=http://192.168.1.10:6185 \
+  -e NEKO_PASSWORD=你的侧车口令 \
+  -v neko-data:/data \
+  ghcr.io/baizi51676-source/neko-console:latest
+```
+
+镜像由 GitHub Actions 在推送 tag 时自动构建并发布到 GHCR（linux/amd64 + linux/arm64），无需任何额外凭据。
+
+### 方式三：仅静态文件（功能受限）
+
+`dist/` 可以直接交给 Nginx / Caddy 托管，但**外观页保存主题与壁纸、对话页数据、插件 zip 上传**依赖侧车，只部署静态文件时这些功能不可用（不推荐）。若确实要这么做，反代要求：
+
+1. `/api/*` 反向代理到 AstrBot 的 WebUI（默认 `http://127.0.0.1:6185`）；
+2. 前端与 API 必须**同源**，否则登录 Cookie / `Authorization` 不会生效；
 3. 若 AstrBot 下发的 JWT Cookie 带 `Secure` 属性而你在 HTTP 下访问，需要在代理层去掉该属性（否则浏览器会丢弃它，表现为“登录成功但立刻掉线”）。
 
 登录使用 AstrBot 控制台账号。
+
+### 环境变量
+
+| 变量 | 默认 | 说明 |
+|---|---|---|
+| `ASTRBOT_BASE` | `http://astrbot:6185` | AstrBot WebUI 地址（跨机时写宿主机 IP） |
+| `PORT` | `6186` | 容器内监听端口（compose 用 `NEKO_PORT` 映射到宿主机） |
+| `NEKO_PASSWORD` | 空 | 侧车访问口令，设置后首次访问需输入 |
+| `DATA_DIR` | 镜像内 `/data` | 主题、壁纸等持久化目录（compose 默认挂到 `./data`） |
+| `NEKO_MAX_PROXY_MB` | `6` | 上游超大 JSON 的代理上限，`0` = 不限制 |
+| `NEKO_STRIP_COOKIE_SECURE` | `1` | 去掉上游 Cookie 的 `Secure` 属性 |
+| `NEKO_VERBOSE` | `1` | 输出访问日志 |
+
+### 常见问题
+
+- **登录成功又立刻掉线**：Cookie `Secure` 问题（HTTP 访问时）。侧车默认已剥离；自建反代需要自己处理。
+- **外观页提示保存失败 / 对话页没有数据**：说明只部署了静态文件，缺少侧车。
+- **连不上 AstrBot**：容器内的 `127.0.0.1` 指容器自己，请填宿主机的局域网 IP，或把两个容器加入同一 docker 网络。
 
 ## 与 AstrBot 的关系
 

@@ -1,0 +1,46 @@
+# Neko Console — 一键部署
+#
+#   1) cp .env.example .env  并填写 ASTRBOT_BASE
+#   2) docker compose up -d
+#
+# 若你的 AstrBot 跑在 docker compose 里（容器名/服务名 astrbot），
+# 把它加入同一个网络即可直接使用 http://astrbot:6185：
+#   networks: [default, astrbot_default]      # 加在 services.neko-console 下
+#   networks:
+#     astrbot_default:
+#       external: true
+#       name: <你的 AstrBot 网络名>            # docker network ls 可查
+
+services:
+  neko-console:
+    image: ${NEKO_IMAGE:-ghcr.io/baizi51676-source/neko-console:latest}
+    # 想用本地源码构建而不是拉镜像时，注释掉上一行并启用下一行：
+    # build:
+    #   context: .
+    #   args:
+    #     NPM_REGISTRY: ${NPM_REGISTRY:-}
+    container_name: neko-console
+    restart: unless-stopped
+    ports:
+      - "${NEKO_PORT:-6186}:6186"
+    environment:
+      # AstrBot 的 WebUI 地址（必填）。同网络可用服务名，跨机用 IP:端口。
+      ASTRBOT_BASE: ${ASTRBOT_BASE:-http://astrbot:6185}
+      # 侧车访问口令（可留空）。设置后打开页面需要先输入一次。
+      NEKO_PASSWORD: ${NEKO_PASSWORD:-}
+      # 上游返回超大 JSON 时的代理上限（MB），0 表示不限制
+      NEKO_MAX_PROXY_MB: ${NEKO_MAX_PROXY_MB:-6}
+      NEKO_VERBOSE: "1"
+    volumes:
+      - ./data:/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:6186/__neko/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+# 需要与已有 AstrBot 网络互通时，取消下面注释并改成实际网络名
+# networks:
+#   default:
+#     name: astrbot_default
+#     external: true
