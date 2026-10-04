@@ -60,7 +60,7 @@ docker run -d --name neko-console --restart unless-stopped \
   -e ASTRBOT_BASE=http://192.168.1.10:6185 \
   -e NEKO_PASSWORD=你的侧车口令 \
   -v neko-data:/data \
-  ghcr.io/baizi51676-source/neko-console:latest
+  ghcr.io/baizi51676-source/neko_console:latest
 ```
 
 镜像由 GitHub Actions 在推送 tag 时自动构建并发布到 GHCR（linux/amd64 + linux/arm64），无需任何额外凭据。

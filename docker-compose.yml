@@ -13,7 +13,7 @@
 
 services:
   neko-console:
-    image: ${NEKO_IMAGE:-ghcr.io/baizi51676-source/neko-console:latest}
+    image: ${NEKO_IMAGE:-ghcr.io/baizi51676-source/neko_console:latest}
     # 想用本地源码构建而不是拉镜像时，注释掉上一行并启用下一行：
     # build:
     #   context: .
